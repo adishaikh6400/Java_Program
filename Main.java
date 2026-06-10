@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.*;
+import java.time.LocalDate;
 
 
 class Employee{
@@ -8,12 +9,14 @@ class Employee{
 	private String empName;
 	private double salary;
 	private String dept;
+	private LocalDate joiningDate;
 	
-	Employee(int empid, String empName, double salary, String dept){
+	Employee(int empid, String empName, double salary, String dept, LocalDate joiningDate){
 		this.empid = empid;
 		this.empName = empName;
 		this.salary = salary;
 		this.dept = dept;
+		this.joiningDate = joiningDate;
 	}
 	
 	public int getId(){
@@ -30,6 +33,10 @@ class Employee{
 	
 	public String getDept(){
 		return dept;
+	}
+	
+	public LocalDate getjoiningDate(){
+		return joiningDate;
 	}
 	
 	public void setId(int empid){
@@ -58,7 +65,7 @@ public class Main{
 		
 		while(true){
 			
-		System.out.println("********************");
+		System.out.println("\n********************");
 		System.out.println("Employee Management System");
 		System.out.println("********************");
 		
@@ -69,6 +76,9 @@ public class Main{
 		System.out.println("4. Search Employee");
 		System.out.println("5. Update Salary of Employee");
 		System.out.println("6. Highest Paid EMployee");
+		System.out.println("7. Group Employees By Department");
+		System.out.println("8. Sort Employees by Salary");
+		System.out.println("9. Sort Employees by Joining Date");
 		
 		int choice = sc.nextInt();
 		System.out.println(choice);
@@ -90,7 +100,10 @@ public class Main{
 				System.out.println("Enter Department");
 				String department = sc.next();
 				
-				Employee emp = new Employee(id,name,sal,department);
+				System.out.println("Enter Date of joining: (yyyy-mm-dd)");
+				LocalDate jd = LocalDate.parse(sc.next());
+				
+				Employee emp = new Employee(id,name,sal,department,jd);
 				employees.add(emp);
 				System.out.println("Employee Added Successfully");
 				break;
@@ -215,17 +228,80 @@ public class Main{
 					);
 				 break;
 				 
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+				 
+				 //Group
+				 case 7:
+				 
+				 Map<String, List<Employee>> deptMap = new HashMap<>();
+				 
+				 for(Employee e : employees){
+					 String dept = e.getDept();
+					 
+					 //if dept not conatins 
+					 if(!deptMap.containsKey(dept)){
+						 deptMap.put(dept , new ArrayList<>());
+					 }
+					 deptMap.get(dept).add(e);
+				 }
+				 
+				 for(String dept: deptMap.keySet()){
+					 System.out.println("\nDepartment: " +dept);
+					 
+					 for(Employee e : deptMap.get(dept)){
+						 System.out.println(
+						 e.getId() + " "+
+						 e.getName() + " " +
+						 e.getSalary() + " " +
+						 e.getDept()
+						 );
+					 }
+				 }
+				 break;
+				 
+				 
+				 //Sort by Salary
+				 case 8:
+				 
+				 Collections.sort(employees , (e1,e2) ->
+				 
+				 Double.compare(e1.getSalary(), e2.getSalary())
+				 );
+				 
+				 for(Employee e: employees){
+					 System.out.println(
+					 e.getId() + " " +
+					 e.getName() + " " +
+					 e.getSalary() + " " +
+					 e.getDept()
+					 );
+				 }
+				 break;
+				 
+				 //Sort Employees by joining Date
+				 
+				 case 9:
+				 
+				 Collections.sort(
+				 employees,
+				 Comparator.comparing(Employee :: getjoiningDate)
+				 );
+				 
+				 for(Employee e : employees){
+					 System.out.println(
+					 e.getId() + " " +
+					 e.getName() + " " +
+					 e.getSalary() + " " +
+					 e.getDept()+ " " +
+					e.getjoiningDate()
+					 );
+				 }
+				 
+				 
+				 
+				 break;
+				 
+				 
+				 
 				
 				
 			}
