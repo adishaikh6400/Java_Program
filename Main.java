@@ -75,10 +75,11 @@ public class Main{
 		System.out.println("3. Remove Employee");
 		System.out.println("4. Search Employee");
 		System.out.println("5. Update Salary of Employee");
-		System.out.println("6. Highest Paid EMployee");
+		System.out.println("6. Highest Paid Employee");
 		System.out.println("7. Group Employees By Department");
 		System.out.println("8. Sort Employees by Salary");
 		System.out.println("9. Sort Employees by Joining Date");
+		System.out.println("10. Count Employees By Department");
 		
 		int choice = sc.nextInt();
 		System.out.println(choice);
@@ -294,12 +295,29 @@ public class Main{
 					 e.getDept()+ " " +
 					e.getjoiningDate()
 					 );
+
+					 
 				 }
 				 
 				 
-				 
+			
 				 break;
-				 
+				 case 10:
+
+				System.out.println("Enter Department Name:");
+				String searchDept = sc.next();
+
+				int count = 0;
+
+				for(Employee e : employees){
+					if(e.getDept().equalsIgnoreCase(searchDept)){
+						count++;
+					}
+				}
+
+				System.out.println("Number of employees in " + searchDept + " department: " + count);
+
+				break;
 				 
 				 
 				
