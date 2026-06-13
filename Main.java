@@ -52,8 +52,29 @@ class Employee{
 		this.dept = dept;
 	}
 	
-
 	
+	public static Employee searchEmployeeById(
+        ArrayList<Employee> employees,
+        int id) throws EmployeeNotFoundException {
+
+    for(Employee e : employees) {
+        if(e.getId() == id) {
+            return e;
+        }
+    }
+
+    throw new EmployeeNotFoundException(
+        "Employee with ID " + id + " not found."
+		);
+		}
+}
+
+
+
+class EmployeeNotFoundException extends Exception{
+	EmployeeNotFoundException(String message){
+		super(message);
+	}
 }
 
 
@@ -80,6 +101,7 @@ public class Main{
 		System.out.println("8. Sort Employees by Salary");
 		System.out.println("9. Sort Employees by Joining Date");
 		System.out.println("10. Count Employees By Department");
+		System.out.println("11. Search Employees by DOJ");
 		
 		int choice = sc.nextInt();
 		System.out.println(choice);
@@ -152,29 +174,31 @@ public class Main{
 				
 				//Search Employees by  ID 
 				case 4:
+				case 4:
+
 				System.out.println("Enter Employee Id to Search");
 				int searchEmpbyId = sc.nextInt();
-				
-				boolean isFound = false;
-				for(Employee e : employees){
-					if(e.getId() == searchEmpbyId){
-						isFound = true;
-						System.out.println(
-					e.getId() + " " +
-					e.getName() + " " +
-					e.getSalary() + " " +
-					e.getDept()
+
+				try {
+
+					Employee e = searchEmployeeById(
+						employees,
+						searchEmpbyId
 					);
-					break;
-					}
-					
+
+					System.out.println(
+						e.getId() + " " +
+						e.getName() + " " +
+						e.getSalary() + " " +
+						e.getDept()
+					);
+
 				}
-				if(!isFound){
-					System.out.println("Employee Not Found");
+				catch(EmployeeNotFoundException ex) {
+					System.out.println(ex.getMessage());
 				}
 
 				break;
-				
 				
 				//Update Salary
 				case 5:
@@ -321,6 +345,32 @@ public class Main{
 				 
 				 
 				
+				case 11:
+
+				System.out.println("Enter Joining Date to Search (yyyy-mm-dd):");
+				LocalDate searchDate = LocalDate.parse(sc.next());
+
+				boolean found = false;
+
+				for(Employee e : employees){
+					if(e.getjoiningDate().equals(searchDate)){
+						found = true;
+
+						System.out.println(
+							e.getId() + " " +
+							e.getName() + " " +
+							e.getSalary() + " " +
+							e.getDept() + " " +
+							e.getjoiningDate()
+						);
+					}
+				}
+
+				if(!found){
+					System.out.println("No employees found with DOJ: " + searchDate);
+				}
+
+				break;
 				
 			}
 			
